@@ -1,6 +1,7 @@
-const gameBoard = document.getElementById('game-board');
-const winModal = document.getElementById('win-modal');
-const reloadBtn = document.getElementById('reload-btn');
+// FIXED: Element IDs now perfectly match the HTML
+const gameBoard = document.getElementById('memoryGrid');
+const winModal = document.getElementById('winModal');
+const reloadBtn = document.getElementById('restartBtn');
 
 const techItems = [
     'HTML', 'CSS', 'JavaScript', 'React', 
@@ -36,10 +37,12 @@ function initGame() {
         cardElement.classList.add('card');
         cardElement.dataset.name = item;
 
+        // FIXED: Put the tech item text on the front so it reveals on click.
+        // Added a FontAwesome code icon as the uniform back of all cards.
         cardElement.innerHTML = `
             <div class="card-inner">
-                <div class="card-front"></div>
-                <div class="card-back">${item}</div>
+                <div class="card-front">${item}</div>
+                <div class="card-back"><i class="fa-solid fa-code"></i></div>
             </div>
         `;
         cardElement.addEventListener('click', flipCard);
@@ -48,21 +51,17 @@ function initGame() {
 }
 
 function flipCard() {
-    
     if (lockBoard) return;
     if (this === firstCard) return;
 
-    
     this.classList.add('flip');
 
     if (!hasFlippedCard) {
-        
         hasFlippedCard = true;
         firstCard = this;
         return;
     }
 
-    
     secondCard = this;
     checkForMatch();
 }
@@ -73,13 +72,16 @@ function checkForMatch() {
 }
 
 function disableCards() {
+    // FIXED: Adds matched class to trigger the green CSS border
+    firstCard.classList.add('matched');
+    secondCard.classList.add('matched');
+
     firstCard.removeEventListener('click', flipCard);
     secondCard.removeEventListener('click', flipCard);
     
     matchCounter++;
     
     if (matchCounter === 8) {
-        
         setTimeout(() => {
             winModal.style.display = 'flex';
         }, 500); 
