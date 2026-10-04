@@ -1,0 +1,214 @@
+/* ==========================================================================
+   1. CSS Reset & Core Variables
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-color: #0f172a;
+  --card-back-bg: #1e293b;
+  --card-front-bg: #334155;
+  --accent-color: #38bdf8;
+  --accent-glow: rgba(56, 189, 248, 0.4);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --font-family: 'Fira Code', monospace, monospace;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* ==========================================================================
+   2. Header Styling
+   ========================================================================== */
+.game-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.game-header h1 {
+  font-size: 2rem;
+  color: var(--accent-color);
+  text-shadow: 0 0 12px var(--accent-glow);
+  margin-bottom: 0.25rem;
+}
+
+.game-header .subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   3. 4x4 CSS Grid Layout
+   ========================================================================== */
+.game-container {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+/* ==========================================================================
+   4. 3D Card Flipping Mechanics
+   ========================================================================== */
+.card {
+  perspective: 1000px; /* Essential for 3D flip depth */
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Flip Trigger State */
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Base style for card faces */
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* Hides back of card element when rotated */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  border: 2px solid #475569;
+}
+
+/* Card Front (Revealed Face) */
+.card-front {
+  background-color: var(--card-front-bg);
+  color: var(--accent-color);
+  font-size: 2rem;
+  transform: rotateY(180deg);
+  border-color: var(--accent-color);
+}
+
+/* Card Back (Covered Face) */
+.card-back {
+  background-color: var(--card-back-bg);
+  color: #64748b;
+  font-size: 1.5rem;
+}
+
+.card:hover .card-inner {
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Matched Card State */
+.card.matched .card-front {
+  border-color: #4ade80; /* Green accent on match */
+  color: #4ade80;
+}
+
+/* ==========================================================================
+   5. Modal Overlay Styling
+   ========================================================================== */
+.modal-overlay {
+  display: none; /* Controlled via JavaScript */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+/* Shown via class or inline flex */
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal-content {
+  background-color: var(--card-back-bg);
+  border: 2px solid var(--accent-color);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 0 20px var(--accent-glow);
+  max-width: 320px;
+  width: 90%;
+}
+
+.modal-content h2 {
+  color: #4ade80;
+  margin-bottom: 0.5rem;
+}
+
+.modal-content p {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-family);
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0ea5e9;
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .game-container {
+    max-width: 340px;
+  }
+  .memory-grid {
+    gap: 8px;
+  }
+  .card-front {
+    font-size: 1.5rem;
+  }
+}
