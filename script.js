@@ -3,12 +3,9 @@ const winModal = document.getElementById('winModal');
 const reloadBtn = document.getElementById('restartBtn');
 const modeRadios = document.querySelectorAll('input[name="gameMode"]');
 
-const techItems = [
-    'HTML', 'CSS', 'JavaScript', 'React', 
-    'Node.js', 'API', 'GitHub', 'Database'
-];
+const cardFaces = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-let cardDeck = [...techItems, ...techItems];
+let cardDeck = [...cardFaces, ...cardFaces];
 
 let hasFlippedCard = false;
 let lockBoard = false;
@@ -17,12 +14,10 @@ let secondCard = null;
 let matchCounter = 0;
 let isHardMode = false;
 
-// Mode selection listener
 modeRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
         isHardMode = e.target.value === 'hard';
         
-        // Toggles body class to switch background image and theme colors
         if (isHardMode) {
             document.body.classList.add('hard-mode-active');
         } else {
@@ -56,8 +51,12 @@ function initGame() {
 
         cardElement.innerHTML = `
             <div class="card-inner">
-                <div class="card-front">${item}</div>
-                <div class="card-back"><i class="fa-solid fa-code"></i></div>
+                <div class="card-front">
+                    <img src="${item}.png" alt="Card ${item}" class="card-img" />
+                </div>
+                <div class="card-back">
+                    <img src="9.png" alt="Card Back" class="card-img" />
+                </div>
             </div>
         `;
         cardElement.addEventListener('click', flipCard);
