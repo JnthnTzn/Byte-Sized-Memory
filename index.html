@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Byte-Sized Memory</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Google Font & Font Awesome Icons for Tech Terms/Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
@@ -19,12 +18,24 @@
   <header class="game-header">
     <h1>&lt;Byte-Sized Memory /&gt;</h1>
     <p class="subtitle">Match tech cards to test your memory!</p>
+
+    <!-- Mode Selector -->
+    <div class="mode-selector">
+      <label class="mode-label normal-mode">
+        <input type="radio" name="gameMode" value="normal" checked>
+        <span>Normal Mode</span>
+      </label>
+      <label class="mode-label hard-mode">
+        <input type="radio" name="gameMode" value="hard">
+        <span>Hard Mode 🔥</span>
+      </label>
+    </div>
   </header>
 
   <!-- Main Game Container -->
   <main class="game-container">
     <div class="memory-grid" id="memoryGrid">
-      <!-- JavaScript will dynamically inject cards here -->
+      <!-- Cards dynamically injected here -->
     </div>
   </main>
 

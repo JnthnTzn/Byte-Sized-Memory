@@ -1,7 +1,7 @@
-// FIXED: Element IDs now perfectly match the HTML
 const gameBoard = document.getElementById('memoryGrid');
 const winModal = document.getElementById('winModal');
 const reloadBtn = document.getElementById('restartBtn');
+const modeRadios = document.querySelectorAll('input[name="gameMode"]');
 
 const techItems = [
     'HTML', 'CSS', 'JavaScript', 'React', 
@@ -15,6 +15,23 @@ let lockBoard = false;
 let firstCard = null;
 let secondCard = null;
 let matchCounter = 0;
+let isHardMode = false;
+
+// Mode selection listener
+modeRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        isHardMode = e.target.value === 'hard';
+        
+        // Toggles body class to switch background image and theme colors
+        if (isHardMode) {
+            document.body.classList.add('hard-mode-active');
+        } else {
+            document.body.classList.remove('hard-mode-active');
+        }
+        
+        initGame();
+    });
+});
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -37,8 +54,6 @@ function initGame() {
         cardElement.classList.add('card');
         cardElement.dataset.name = item;
 
-        // FIXED: Put the tech item text on the front so it reveals on click.
-        // Added a FontAwesome code icon as the uniform back of all cards.
         cardElement.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">${item}</div>
@@ -72,7 +87,6 @@ function checkForMatch() {
 }
 
 function disableCards() {
-    // FIXED: Adds matched class to trigger the green CSS border
     firstCard.classList.add('matched');
     secondCard.classList.add('matched');
 
@@ -96,8 +110,36 @@ function unflipCards() {
     setTimeout(() => {
         firstCard.classList.remove('flip');
         secondCard.classList.remove('flip');
-        resetBoardState();
-    }, 1000);
+        
+        if (isHardMode) {
+            setTimeout(() => {
+                shuffleBoardDOM();
+            }, 500);
+        } else {
+            resetBoardState();
+        }
+    }, 600);
+}
+
+function shuffleBoardDOM() {
+    const unmatchedCards = Array.from(gameBoard.children).filter(
+        card => !card.classList.contains('matched')
+    );
+
+    unmatchedCards.forEach(card => card.classList.add('shuffling'));
+
+    setTimeout(() => {
+        for (let i = unmatchedCards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            gameBoard.insertBefore(unmatchedCards[i], unmatchedCards[j]);
+        }
+
+        unmatchedCards.forEach(card => card.classList.remove('shuffling'));
+
+        setTimeout(() => {
+            resetBoardState();
+        }, 250);
+    }, 250);
 }
 
 function resetBoardState() {

@@ -13,14 +13,22 @@
   --card-front-bg: #334155;
   --accent-color: #38bdf8;
   --accent-glow: rgba(56, 189, 248, 0.4);
+  --hard-mode-color: #ef4444;
+  --hard-mode-glow: rgba(239, 68, 68, 0.4);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --font-family: 'Fira Code', monospace, monospace;
 }
 
+/* Normal Mode Background */
 body {
   min-height: 100vh;
   background-color: var(--bg-color);
+  background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('bg1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-family);
   display: flex;
@@ -28,10 +36,16 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  transition: background-image 0.4s ease-in-out;
+}
+
+/* Hard Mode Background */
+body.hard-mode-active {
+  background-image: linear-gradient(rgba(24, 10, 20, 0.88), rgba(24, 10, 20, 0.88)), url('bg2.jpg');
 }
 
 /* ==========================================================================
-   2. Header Styling
+   2. Header Styling & Mode Selector
    ========================================================================== */
 .game-header {
   text-align: center;
@@ -50,34 +64,94 @@ body {
   font-size: 0.9rem;
 }
 
+.mode-selector {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.mode-label {
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+
+/* Normal Mode Radio Styling */
+.mode-label.normal-mode input[type="radio"] {
+  accent-color: var(--accent-color);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.mode-label.normal-mode input[type="radio"]:checked + span {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+/* Hard Mode Red Styling */
+.mode-label.hard-mode {
+  color: #f87171;
+}
+
+.mode-label.hard-mode input[type="radio"] {
+  accent-color: var(--hard-mode-color);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.mode-label.hard-mode input[type="radio"]:checked + span {
+  color: var(--hard-mode-color);
+  font-weight: 700;
+  text-shadow: 0 0 10px var(--hard-mode-glow);
+}
+
 /* ==========================================================================
-   3. 4x4 CSS Grid Layout
+   3. 4x4 CSS Grid Layout & Play Area Border
    ========================================================================== */
 .game-container {
   width: 100%;
-  max-width: 500px;
-  aspect-ratio: 1 / 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-x: auto;
 }
 
 .memory-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  gap: 12px;
-  width: 100%;
-  height: 100%;
+  grid-template-columns: repeat(4, 105px);
+  grid-template-rows: repeat(4, 148px);
+  gap: 16px;
+  width: max-content;
+  padding: 16px;
+  border: 2px solid var(--accent-color);
+  border-radius: 12px;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Red Play Area Border when Hard Mode is Active */
+body.hard-mode-active .memory-grid {
+  border-color: var(--hard-mode-color);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
+  background-color: rgba(30, 10, 20, 0.6);
 }
 
 /* ==========================================================================
-   4. 3D Card Flipping Mechanics
+   4. 3D Card Flipping & Clean Single-Transition Shuffle
    ========================================================================== */
 .card {
   perspective: 1000px;
   cursor: pointer;
   user-select: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .card-inner {
@@ -90,7 +164,6 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* FIXED: Changed .flipped to .flip to match JavaScript */
 .card.flip .card-inner {
   transform: rotateY(180deg);
 }
@@ -106,12 +179,13 @@ body {
   align-items: center;
   border-radius: 8px;
   border: 2px solid #475569;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .card-front {
   background-color: var(--card-front-bg);
   color: var(--accent-color);
-  font-size: 1.25rem; /* Adjusted slightly so longer words like JavaScript fit */
+  font-size: 1.25rem;
   transform: rotateY(180deg);
   border-color: var(--accent-color);
 }
@@ -126,10 +200,33 @@ body {
   box-shadow: 0 0 12px var(--accent-glow);
 }
 
-/* Matched Card State */
+/* --- Hard Mode Red Card Styles --- */
+body.hard-mode-active .card-back {
+  background-color: #2a1215;
+  border-color: var(--hard-mode-color);
+  color: #fca5a5;
+}
+
+body.hard-mode-active .card-front {
+  background-color: #3b1419;
+  border-color: var(--hard-mode-color);
+  color: var(--hard-mode-color);
+}
+
+body.hard-mode-active .card:hover .card-inner {
+  box-shadow: 0 0 12px var(--hard-mode-glow);
+}
+
+/* Matched Card State (Overrides both modes) */
 .card.matched .card-front {
-  border-color: #4ade80; 
-  color: #4ade80;
+  border-color: #4ade80 !important; 
+  color: #4ade80 !important;
+}
+
+/* Single-pass smooth shuffle transition */
+.card.shuffling {
+  opacity: 0.15;
+  transform: scale(0.92);
 }
 
 /* ==========================================================================
@@ -193,11 +290,9 @@ body {
 }
 
 @media (max-width: 480px) {
-  .game-container {
-    max-width: 340px;
-  }
   .memory-grid {
     gap: 8px;
+    padding: 12px;
   }
   .card-front {
     font-size: 1rem;
