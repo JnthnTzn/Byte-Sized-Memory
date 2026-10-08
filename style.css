@@ -20,7 +20,7 @@
 body {
   min-height: 100vh;
   background-color: var(--bg-color);
-  background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('bg1.jpg');
+  background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('assets/bg1.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -36,7 +36,7 @@ body {
 }
 
 body.hard-mode-active {
-  background-image: linear-gradient(rgba(24, 10, 20, 0.88), rgba(24, 10, 20, 0.88)), url('bg2.jpg');
+  background-image: linear-gradient(rgba(24, 10, 20, 0.88), rgba(24, 10, 20, 0.88)), url('assets/bg2.jpg');
 }
 
 .game-header {

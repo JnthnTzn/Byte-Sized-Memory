@@ -52,10 +52,10 @@ function initGame() {
         cardElement.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">
-                    <img src="${item}.png" alt="Card ${item}" class="card-img" />
+                    <img src="assets/${item}.png" alt="Card ${item}" class="card-img" />
                 </div>
                 <div class="card-back">
-                    <img src="9.png" alt="Card Back" class="card-img" />
+                    <img src="assets/9.png" alt="Card Back" class="card-img" />
                 </div>
             </div>
         `;
